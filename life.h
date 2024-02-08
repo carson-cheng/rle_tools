@@ -121,14 +121,48 @@ std::vector<int> getbbox(std::vector< std::vector<int> > pat){
     }
     return {xmin, ymin, xmax - xmin + 1, ymax - ymin + 1};
 }
-std::string getrle(std::vector< std::vector<int> > pat){
+/*std::string getrle(std::vector< std::vector<int> > pat){
     // TODO: sort the celllist vector so that it becomes less expensive to generate the rle
     std::vector<int> bbox = getbbox(pat);
     std::string rle = "x = 0, y = 0, rule = B3/S23\n";
+    std::cout << bbox[0] << ", " << bbox[1] << ", " << bbox[2] << ", " << bbox[3] << std::endl;
     for (int y=bbox[1]; y<(bbox[1]+bbox[3]); y++){
         for (int x=bbox[0]; x<(bbox[0]+bbox[2]); x++){
             std::vector<int> val = {x, y};
             if(std::find(pat.begin(), pat.end(), val)!=pat.end()){
+                // Found the item
+                rle += "o";
+                std::cout << x << ", " << y << std::endl;
+            } else {
+                rle += "b";
+            }
+        }
+        rle += "$";
+    }
+    rle += "!";
+    return rle;
+}*/
+
+std::string getrle(std::vector< std::vector<int> > pat, int xmin, int xmax, int ymin, int ymax){
+    // TODO: sort the celllist vector so that it becomes less expensive to generate the rle
+    // to signal that the bounding box needs to be found, just specify xmin, xmax, ymin, and ymax to be -1
+    std::string rle = "x = 0, y = 0, rule = B3/S23\n";
+    if (xmin == -1 || xmax == -1 || ymin == -1 || ymax == -1){
+        std::vector<int> bbox = getbbox(pat);
+        xmin = bbox[0];
+        xmax = bbox[0] + bbox[2];
+        ymin = bbox[1];
+        ymax = bbox[1] + bbox[3];
+    }
+    bool grid[64][64] = {{false}};
+    for (int i=0; i<pat.size(); i++){
+        grid[pat[i][0]][pat[i][1]] = true;
+        //std::cout << pat[i][0] << ", " << pat[i][1] << std::endl;
+    }
+    for (int y=ymin; y<ymax; y++){
+        for (int x=xmin; x<xmax; x++){
+            std::vector<int> val = {x, y};
+            if(grid[x][y] == true){
                 // Found the item
                 rle += "o";
                 //std::cout << x << ", " << y << std::endl;

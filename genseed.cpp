@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <cstring>
 #include <cstdio>
@@ -13,26 +14,28 @@ int main(){
     for (int i=0; i<cats_comp.size(); i++){
         cats.push_back(decompress(cats_comp[i]));
     }
+    //std::cout << "Welcome!" << std::endl;
     int num = cats.size();
     int x = 15;
     int y = 15;
     int apple = -1;
+    int its = 0;
     std::string glider = decompress("b2o$2o$2bo!");
     while (apple--){
         std::vector< std::vector<int> > board;
-        for (int i=0; i<4; i++){
-            std::vector< std::vector<int> > temp;
-            std::vector< std::vector<int> > nextgen = {{29, 29}, {29, 30}, {30, 28}, {30, 31}, {31, 29}, {31, 30}, {31, 31}}; // ensure that the first pasting happens
-            //std::cout << getrle(nextgen) << std::endl;
-            while (temp != nextgen){
-                //std::cout << rng()%num << std::endl;
-                temp = paste(board, cats[rng()%num], rng()%x, rng()%y);
-                //std::cout << temp.size() << std::endl;
-                nextgen = run(temp, 1);
-            }
-            board = temp;
+        for (int i=0; i<3; i++){
+            board = paste(board, cats[rng()%num], rng()%x+1, rng()%y+1);
         }
-        board = paste(board, glider, 28, 28);
-        std::cout << getrle(board) << std::endl;
+        std::sort(board.begin(), board.end(), std::greater< std::vector<int> >());
+        std::vector< std::vector<int> > nextgen = run(board, 1);
+        std::sort(nextgen.begin(), nextgen.end(), std::greater< std::vector<int> >());
+        if (nextgen == board){
+            board = paste(board, glider, 24, 24);
+            std::cout << getrle(board, 1, 27, 1, 27) << std::endl;
+            its += 1;
+            if (its % 1000 == 0){
+                std::cout << its << " soups processed" << std::endl;
+            }
+        }
     }
 }

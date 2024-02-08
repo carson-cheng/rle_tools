@@ -18,6 +18,7 @@ int main(){
     for(int i=0; i<1000; i++){
         //std::vector< std::vector<int> > pat = {{18, 13}, {19, 14}, {17, 15}, {18, 15}, {19, 15}, {53, 15}, {52, 16}, {52, 17}, {53, 17}, {54, 17}, {22, 39}, {23, 39}, {24, 39}, {24, 40}, {23, 41}};
         std::vector< std::vector<int> > pat = {{29, 29}, {29, 30}, {30, 28}, {30, 31}, {31, 29}, {31, 30}, {31, 31}};
+        std::cout << getrle(pat) << std::endl;
         std::vector< std::vector<int> > newpat = run(pat, 100);
         std::vector<int> box = getbbox(newpat);
         //std::cout << box[0] << ", " << box[1] << std::endl;

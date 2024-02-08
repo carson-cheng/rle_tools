@@ -131,7 +131,7 @@ std::string getrle(std::vector< std::vector<int> > pat){
             if(std::find(pat.begin(), pat.end(), val)!=pat.end()){
                 // Found the item
                 rle += "o";
-                std::cout << x << ", " << y << std::endl;
+                //std::cout << x << ", " << y << std::endl;
             } else {
                 rle += "b";
             }

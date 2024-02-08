@@ -50,6 +50,12 @@ std::vector< std::vector<int> > paste(std::vector< std::vector<int> > res, std::
     }
     return res;
 }
+std::vector< std::vector<int> > paste_list(std::vector< std::vector<int> > res, std::vector< std::vector<int> > pat, int x, int y){
+    for (int i=0; i<pat.size(); i++){
+        res.push_back({pat[i][0] + x, pat[i][1] + y});
+    }
+    return res;
+}
 std::vector< std::vector<int> > run(std::vector< std::vector<int> > pat, int gens){
     //this iterator is very simple, and does not have any optimization over escaping spaceships
     //step_size must be a divisor of gens, or the program might not work properly.

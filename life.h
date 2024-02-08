@@ -175,3 +175,47 @@ std::string getrle(std::vector< std::vector<int> > pat, int xmin, int xmax, int 
     rle += "!";
     return rle;
 }
+
+bool is_stable(std::vector< std::vector<int> > pat){
+    //this iterator is very simple, and does not have any optimization over escaping spaceships
+    //step_size must be a divisor of gens, or the program might not work properly.
+    //limits pattern size to at most 64x64
+    //works weirdly when values of the cell list gets close to zero
+    int xmin=2147483647; int ymin=2147483647; int xmax=0; int ymax=0;
+    bool cells[64][64] = {{false}};
+    for(int i=0; i<pat.size(); i++){
+        cells[pat[i][0]][pat[i][1]] = true;
+        if (xmin > pat[i][0]){
+            xmin = pat[i][0];
+        } else if (xmax < pat[i][0]){
+            xmax = pat[i][0];
+        }
+        if (ymin > pat[i][1]){
+            ymin = pat[i][1];
+        } else if (ymax < pat[i][1]){
+            ymax = pat[i][1];
+        }
+    }
+    //run the pattern for 1 generation
+    //bool newcells[64][64] = {{false}};
+    std::vector< std::vector<int> > newpat;
+    for(int i=xmin-1; i<xmax+2; i++){
+        for(int j=ymin-1; j<ymax+2; j++){
+            std::vector<bool> neighbors;
+            neighbors = {cells[i-1][j-1], cells[i][j-1], cells[i+1][j-1], cells[i-1][j], cells[i+1][j], cells[i-1][j+1], cells[i][j+1], cells[i+1][j+1]};
+            if (cells[i][j] == false){
+                if (std::count(neighbors.begin(), neighbors.end(), true) == 3){
+                    // cell birth
+                    return false;
+                }
+            } else {
+                int cnt = std::count(neighbors.begin(), neighbors.end(), true);
+                if (cnt < 2 or cnt > 3){
+                    // cell death
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}

@@ -1,7 +1,8 @@
 import lifelib
 sess = lifelib.load_rules('b3s23')
 lt = sess.lifetree(n_layers=1)
-pats = ["xs4_33", "xs6_696", "xs7_2596", "xs5_253", "xs6_356", "xs6_bd", "xs6_39c"]
+#pats = ["xs4_33", "xs6_696", "xs7_2596", "xs5_253", "xs6_356", "xs6_bd", "xs6_39c"]
+pats = ["xs4_33", "xs8_6996"]
 pats = [lt.pattern(rle) for rle in pats]
 def generate_transformations(pat):
     # use a phase difference of up to 8 generations, and use all 8 transformations

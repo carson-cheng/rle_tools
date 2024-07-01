@@ -10,7 +10,7 @@ int main(){
     std::mt19937 rng; std::random_device rd;
     rng.seed(rd());
     std::vector< std::vector<int> > example;
-    std::vector<std::string> cats_comp = {"2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "bo$obo$obo$bo!", "b2o$o2bo$b2o!", "bo$obo$obo$bo!", "b2o$o2bo$b2o!", "bo$obo$obo$bo!", "bo$obo$obo$bo!", "b2o$o2bo$b2o!", "b2o$o2bo$b2o!", "b2o$o2bo$bobo$2bo!", "2bo$bobo$o2bo$b2o!", "bo$obo$o2bo$b2o!", "b2o$o2bo$obo$bo!", "b2o$o2bo$obo$bo!", "2bo$bobo$o2bo$b2o!", "bo$obo$o2bo$b2o!", "b2o$o2bo$bobo$2bo!"};
+    std::vector<std::string> cats_comp = {"b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "b2o$o2bo$o2bo$b2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "2o$2o!", "b2o$obo$bo!", "bo$obo$b2o!", "bo$obo$2o!", "2o$obo$bo!", "2o$obo$bo!", "bo$obo$b2o!", "bo$obo$2o!", "b2o$obo$bo!", "b2o$o2bo$bobo$2bo!", "2bo$bobo$o2bo$b2o!", "bo$obo$o2bo$b2o!", "b2o$o2bo$obo$bo!", "b2o$o2bo$obo$bo!", "2bo$bobo$o2bo$b2o!", "bo$obo$o2bo$b2o!", "b2o$o2bo$bobo$2bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!", "bo$obo$bo!"};
     std::vector< std::vector< std::vector<int> > > cats;
     for (int i=0; i<cats_comp.size(); i++){
         cats.push_back(paste(example, decompress(cats_comp[i]), 0, 0));
@@ -18,10 +18,10 @@ int main(){
     //std::cout << "Welcome!" << std::endl;
     int numSL = 4;
     int num = cats.size();
-    int x = 15;
-    int y = 15;
-    int edgy = true;
-    int g_coords = 24;
+    int x = 20;
+    int y = 20;
+    int edgy = false;
+    int g_coords = 28;
     int gx_coords;
     if (edgy == true){
         gx_coords = g_coords - 10;
@@ -47,7 +47,7 @@ int main(){
         //if (nextgen == board){
         if (is_stable(board)){
             board = paste_list(board, glider, gx_coords, g_coords);
-            std::cout << getrle(board, 1, g_coords+3, 1, g_coords+3) << std::endl;
+            std::cout << get_compressed_rle(board, 1, g_coords+3, 1, g_coords+3) << std::endl;
             //acc += 1;
             /*if (acc % 65536 == 0){
                 //float accrate = (float)

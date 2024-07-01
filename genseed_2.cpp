@@ -35,7 +35,7 @@ int main(){
         //if (nextgen == board){
         if (is_stable(board)){
             board = paste(board, glider, 24, 24);
-            std::cout << getrle(board, 1, 27, 1, 27) << std::endl;
+            std::cout << getrle(board, 1, 27, 1, 27, true) << std::endl;
             acc += 1;
             if (acc % 1000 == 0){
                 //float accrate = (float)

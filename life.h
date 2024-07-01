@@ -148,11 +148,15 @@ std::vector<int> getbbox(std::vector< std::vector<int> > pat){
     rle += "!";
     return rle;
 }*/
-
-std::string getrle(std::vector< std::vector<int> > pat, int xmin, int xmax, int ymin, int ymax){
+std::string getrle(std::vector< std::vector<int> > pat, int xmin, int xmax, int ymin, int ymax, bool header){
     // TODO: sort the celllist vector so that it becomes less expensive to generate the rle
     // to signal that the bounding box needs to be found, just specify xmin, xmax, ymin, and ymax to be -1
-    std::string rle = "x = 0, y = 0, rule = B3/S23\n";
+    //std::string rle = "x = 0, y = 0, rule = B3/S23\n";
+    std::string rle = "";
+    if (header == true){
+        rle += "x = " + std::to_string(xmax-xmin) + ", y = " + std::to_string(ymax-ymin) + ", rule = B3/S23\n";
+    }
+    //std::string rle = "x = 10, y = 1, rule = B3/S23\n";
     if (xmin == -1 || xmax == -1 || ymin == -1 || ymax == -1){
         std::vector<int> bbox = getbbox(pat);
         xmin = bbox[0];
@@ -177,6 +181,77 @@ std::string getrle(std::vector< std::vector<int> > pat, int xmin, int xmax, int 
             }
         }
         rle += "$";
+    }
+    rle += "!";
+    return rle;
+}
+std::string get_compressed_rle(std::vector< std::vector<int> > pat, int xmin, int xmax, int ymin, int ymax){
+    // TODO: sort the celllist vector so that it becomes less expensive to generate the rle
+    // to signal that the bounding box needs to be found, just specify xmin, xmax, ymin, and ymax to be -1
+    //std::string rle = "x = 0, y = 0, rule = B3/S23\n";
+    std::string rle = "x = " + std::to_string(xmax-xmin) + ", y = " + std::to_string(ymax-ymin) + ", rule = B3/S23\n";
+    std::string last_item;
+    int buffer = 0;
+    if (xmin == -1 || xmax == -1 || ymin == -1 || ymax == -1){
+        std::vector<int> bbox = getbbox(pat);
+        xmin = bbox[0];
+        xmax = bbox[0] + bbox[2];
+        ymin = bbox[1];
+        ymax = bbox[1] + bbox[3];
+    }
+    bool grid[64][64] = {{false}};
+    for (int i=0; i<pat.size(); i++){
+        grid[pat[i][0]][pat[i][1]] = true;
+        //std::cout << pat[i][0] << ", " << pat[i][1] << std::endl;
+    }
+    for (int y=ymin; y<ymax; y++){
+        for (int x=xmin; x<xmax; x++){
+            std::vector<int> val = {x, y};
+            if(grid[x][y] == true){
+                // Found the item
+                //std::cout << last_item << ", " << buffer << std::endl;
+                if (last_item == "o"){
+                    buffer += 1;
+                } else {
+                    if (buffer > 0){
+                        rle += (std::to_string(buffer + 1) + last_item);
+                    } else {
+                        rle += last_item;
+                    }
+                    //rle += "o";
+                    buffer = 0;
+                    last_item = "o";
+                }
+                //std::cout << x << ", " << y << std::endl;
+            } else {
+                //std::cout << last_item << ", " << buffer << std::endl;
+                if (last_item == "b"){
+                    buffer += 1;
+                } else {
+                    if (buffer > 0){
+                        rle += (std::to_string(buffer + 1) + last_item);
+                    } else {
+                        rle += last_item;
+                    }
+                    //rle += "b";
+                    buffer = 0;
+                    last_item = "b";
+                }
+            }
+        }
+        //std::cout << last_item << ", " << buffer << std::endl;
+        if (last_item == "$"){
+            buffer += 1;
+        } else {
+            if (buffer > 0){
+                rle += (std::to_string(buffer + 1) + last_item);
+            } else {
+                rle += last_item;
+            }
+            //rle += "$";
+            buffer = 0;
+            last_item = "$";
+        }
     }
     rle += "!";
     return rle;

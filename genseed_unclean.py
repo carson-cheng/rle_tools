@@ -21,6 +21,7 @@ for item in patterns:
         if "!" in item:
             break
     rles.append(finalrle)
+
 lim = len(rles)-1
 while True:
     board = lt.pattern()
